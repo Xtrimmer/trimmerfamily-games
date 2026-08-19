@@ -14,7 +14,8 @@ and each game lives in its own folder.
 │   ├── hub.css
 │   └── thumbs/           # one thumbnail image per game
 ├── games/
-│   └── arrow-maze/       # a self-contained game (its own index.html)
+│   ├── arrow-maze/       # a self-contained game (its own index.html)
+│   └── letter-trails/    # guided letter and number tracing
 └── README.md
 ```
 
@@ -58,3 +59,6 @@ Every push to `main` redeploys.
 - **Arrow Maze** — tap arrows to slide them off the board; read each lane and
   clear them all without tapping a blocked one. Procedurally generated,
   guaranteed solvable, difficulty climbs with the level.
+- **Letter Trails** — trace all 26 capital letters, 26 lowercase letters, and
+  numerals 0–9 with guided stroke order, colorful companions, local progress,
+  narration, and touch/mouse/stylus support.

@@ -10,4 +10,10 @@ window.GAMES = [
     blurb: 'Tap an arrow to slide it off the board. Read each lane, clear them all, and don’t tap a blocked one.',
     thumb: 'assets/thumbs/arrow-maze.png',
   },
+  {
+    slug: 'letter-trails',
+    name: 'Letter Trails',
+    blurb: 'Trace letters and numbers with colorful friends.',
+    thumb: 'assets/thumbs/letter-trails.png',
+  },
 ];

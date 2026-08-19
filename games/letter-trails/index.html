@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <meta name="theme-color" content="#0b0b0f" />
+  <title>Letter Trails</title>
+  <link rel="stylesheet" href="style.css?v=3" />
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <a id="back-btn" class="control back" href="../../" aria-label="Back"><span aria-hidden="true">←</span><span>Back</span></a>
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">✦</span>
+        <span>Letter Trails</span>
+      </div>
+      <div class="top-actions">
+        <button id="help-btn" class="control hidden" type="button"><span aria-hidden="true">▶</span><span>Help</span></button>
+        <button id="settings-btn" class="control" type="button" aria-label="Settings" aria-haspopup="dialog"><span aria-hidden="true">⚙</span><span class="wide-label">Settings</span></button>
+      </div>
+    </header>
+
+    <main>
+      <section id="picker-view" class="view active" aria-labelledby="picker-title">
+        <div class="picker-heading">
+          <div>
+            <p class="eyebrow">Pick a trail</p>
+            <h1 id="picker-title">What will you trace?</h1>
+          </div>
+          <p id="explored-count" class="explored">0 of 26 explored</p>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Character type">
+          <button role="tab" data-mode="capitals" aria-selected="true">Capitals</button>
+          <button role="tab" data-mode="lowercase" aria-selected="false">Lowercase</button>
+          <button role="tab" data-mode="numbers" aria-selected="false">Numbers</button>
+        </div>
+        <div id="character-grid" class="character-grid" aria-live="polite"></div>
+      </section>
+
+      <section id="trace-view" class="view" aria-labelledby="trace-title">
+        <div class="trace-intro">
+          <div class="word-sticker" id="word-sticker" aria-hidden="true">🍎</div>
+          <div>
+            <p class="eyebrow" id="trace-kicker">Uppercase A</p>
+            <h1 id="trace-title">A is for Apple</h1>
+            <p id="instruction" class="instruction" aria-live="polite">Drag the apple from number 1.</p>
+          </div>
+        </div>
+
+        <div id="trace-card" class="trace-card">
+          <svg id="trace-svg" viewBox="0 0 100 100" role="img" aria-labelledby="svg-title svg-desc">
+            <title id="svg-title">Letter tracing activity</title>
+            <desc id="svg-desc">Follow each glowing path in number order.</desc>
+            <defs>
+              <filter id="soft-glow" x="-40%" y="-40%" width="180%" height="180%">
+                <feGaussianBlur stdDeviation="2.2" result="blur" />
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <g id="guide-layer"></g>
+            <g id="progress-layer"></g>
+            <g id="cue-layer"></g>
+          </svg>
+          <div id="companion" class="companion" aria-hidden="true">🍎</div>
+          <div id="loading-card" class="loading-card hidden" aria-live="polite">
+            <div class="loading-friend">✦</div>
+            <p>Getting your tracing friend ready…</p>
+          </div>
+        </div>
+
+        <div class="trace-footer">
+          <span id="stroke-count">Stroke 1 of 3</span>
+          <button id="choose-btn" class="secondary" type="button">Choose another</button>
+        </div>
+      </section>
+    </main>
+
+    <div id="celebration" class="celebration hidden" aria-live="assertive">
+      <div id="confetti" class="confetti" aria-hidden="true"></div>
+      <div class="celebration-card">
+        <div id="celebration-friend" class="celebration-friend">🍎</div>
+        <p class="eyebrow">Trail complete</p>
+        <h2 id="celebration-title">You did it!</h2>
+        <p id="celebration-copy">A is for Apple.</p>
+        <div class="celebration-actions">
+          <button id="again-btn" class="primary" type="button">Trace again</button>
+          <button id="celebration-choose-btn" class="secondary" type="button">Choose another</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="settings-modal" class="modal-wrap hidden" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <div class="modal-card">
+        <div class="modal-head"><h2 id="settings-title">Settings</h2><button id="settings-close" class="close" aria-label="Close settings">×</button></div>
+        <label class="setting-row"><span><strong>Narration</strong><small>Letter names, sounds, and hints</small></span><input id="narration-toggle" type="checkbox" checked /></label>
+        <label class="setting-row"><span><strong>Sound effects</strong><small>Sparkles and celebrations</small></span><input id="effects-toggle" type="checkbox" checked /></label>
+        <button id="reset-demos" class="settings-action" type="button">Replay first-time demos</button>
+        <button id="reset-progress" class="settings-action danger" type="button">Hold to reset progress</button>
+        <p id="storage-note" class="storage-note hidden">Progress cannot be saved in this browser, but you can still play.</p>
+      </div>
+    </div>
+  </div>
+  <script src="data.js?v=3"></script>
+  <script src="app.js?v=3"></script>
+</body>
+</html>
