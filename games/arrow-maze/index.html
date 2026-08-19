@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0b0b0f" />
+  <title>Arrow Maze</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <header id="hud">
+      <div class="hud-left">
+        <div class="hud-title">Arrow&nbsp;Maze</div>
+        <button class="hud-level" id="btn-level" title="Change level">Level <span id="level">1</span><span class="lvl-caret">⌄</span></button>
+      </div>
+      <div class="hud-center">
+        <div class="stat">
+          <span class="stat-label">Strikes</span>
+          <div id="hearts" class="hearts"></div>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Arrows left</span>
+          <span id="arrows-left" class="stat-value">0</span>
+        </div>
+      </div>
+      <div class="hud-right">
+        <button id="btn-reset-view" class="icon-btn" title="Reset view" aria-label="Reset view">⤢</button>
+        <button id="btn-mute" class="icon-btn" title="Mute" aria-label="Mute">🔊</button>
+        <button id="btn-new" class="text-btn" title="New board at this level">New&nbsp;Board</button>
+      </div>
+    </header>
+
+    <main id="stage">
+      <canvas id="board"></canvas>
+      <div id="zoom-hint" class="zoom-hint">scroll / pinch to zoom · drag to pan</div>
+    </main>
+
+    <div id="modal-backdrop" class="modal-backdrop hidden">
+      <div class="modal" id="modal">
+        <h2 id="modal-title">Level cleared</h2>
+        <p id="modal-body">Nice and tidy.</p>
+        <div class="modal-actions" id="modal-actions"></div>
+      </div>
+    </div>
+
+    <div id="level-backdrop" class="modal-backdrop hidden">
+      <div class="modal">
+        <h2>Go to level</h2>
+        <p>Jump to any level. Bigger levels are bigger, busier boards.</p>
+        <div class="level-chips" id="level-chips">
+          <button data-lvl="1">1</button>
+          <button data-lvl="25">25</button>
+          <button data-lvl="50">50</button>
+          <button data-lvl="100">100</button>
+          <button data-lvl="200">200</button>
+        </div>
+        <div class="level-input-row">
+          <button id="lvl-minus" class="step" aria-label="Lower">–</button>
+          <input id="lvl-input" type="number" min="1" max="999" inputmode="numeric" />
+          <button id="lvl-plus" class="step" aria-label="Higher">+</button>
+        </div>
+        <div class="modal-actions">
+          <button id="lvl-go" class="primary">Go</button>
+          <button id="lvl-cancel">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="generator.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

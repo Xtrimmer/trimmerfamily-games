@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b0b0f" />
+  <title>Trimmer Family Games</title>
+  <meta name="description" content="A little family arcade of browser games." />
+  <link rel="stylesheet" href="assets/hub.css" />
+</head>
+<body>
+  <header class="hub-header">
+    <h1>Trimmer Family Games</h1>
+    <p class="tagline">A little arcade. Pick a game.</p>
+  </header>
+
+  <main>
+    <div id="grid" class="grid"></div>
+    <p id="empty" class="empty" hidden>No games here yet — check back soon.</p>
+  </main>
+
+  <footer class="hub-footer">games.trimmerfamily.us</footer>
+
+  <script src="games.js"></script>
+  <script>
+    (function () {
+      var grid = document.getElementById('grid');
+      var games = window.GAMES || [];
+      if (!games.length) { document.getElementById('empty').hidden = false; return; }
+      games.forEach(function (g) {
+        var a = document.createElement('a');
+        a.className = 'card';
+        a.href = 'games/' + g.slug + '/';
+        var thumb = g.thumb
+          ? '<img loading="lazy" alt="' + g.name + '" src="' + g.thumb + '">'
+          : '<span class="thumb-fallback">' + g.name.charAt(0) + '</span>';
+        a.innerHTML =
+          '<div class="thumb">' + thumb + '</div>' +
+          '<div class="meta">' +
+            '<div class="name">' + g.name + '</div>' +
+            '<div class="blurb">' + (g.blurb || '') + '</div>' +
+          '</div>';
+        grid.appendChild(a);
+      });
+    })();
+  </script>
+</body>
+</html>
