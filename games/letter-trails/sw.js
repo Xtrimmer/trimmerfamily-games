@@ -1,5 +1,5 @@
-const CACHE = "letter-trails-v3";
-const CORE = ["./", "index.html", "style.css?v=3", "data.js?v=3", "app.js?v=3"];
+const CACHE = "letter-trails-v4";
+const CORE = ["./", "index.html", "style.css?v=4", "data.js?v=4", "app.js?v=4"];
 self.addEventListener("install", event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(CORE))));
 self.addEventListener("activate", event => event.waitUntil(
   caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key)))).then(() => self.clients.claim())

@@ -225,6 +225,15 @@ test("is wired into the game hub with a real thumbnail and game entry point", ()
   assert.ok(exists("games/letter-trails/style.css"), "Letter Trails style.css must exist");
 });
 
+test("reveals straight strokes without dash-offset rendering artifacts", () => {
+  const appSource = fs.readFileSync(path.join(repoRoot, "games/letter-trails/app.js"), "utf8");
+  assert.match(appSource, /function setPathProgress\s*\(/, "app must centralize stroke reveal rendering");
+  assert.match(appSource, /strokeDasharray\s*=\s*["']none["']/, "completed paths must become undashed solid strokes");
+  assert.match(appSource, /total\s*\*\s*clamped/, "partial paths must use an explicit visible segment");
+  assert.match(appSource, /setPathProgress\(path, progressLength \/ total\)/,
+    "pointer tracing must use the stable progress renderer");
+});
+
 let failures = 0;
 for (const { name, fn } of tests) {
   try {

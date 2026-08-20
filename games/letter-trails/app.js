@@ -137,9 +137,8 @@
         const guide = svgEl("path", { d: stroke.d, class: "guide-path" });
         const complete = svgEl("path", { d: stroke.d, class: "progress-path" });
         els.guides.append(halo, guide); els.progress.append(complete);
-        const length = complete.getTotalLength();
-        complete.style.strokeDasharray = `${length}`;
-        complete.style.strokeDashoffset = `${length}`;
+        complete.dataset.totalLength = String(complete.getTotalLength());
+        setPathProgress(complete, 0);
         guidePaths.push(guide); progressPaths.push(complete);
       }
     });
@@ -150,6 +149,25 @@
     const element = document.createElementNS(NS, tag);
     Object.entries(attrs).forEach(([key, value]) => element.setAttribute(key, value));
     return element;
+  }
+
+  // Reveal an explicit dash from the start of the path instead of moving one
+  // full-length dash with stroke-dashoffset. The latter can disappear on
+  // perfectly vertical SVG paths in some browser/GPU combinations.
+  function setPathProgress(path, ratio) {
+    const total = Number(path.dataset.totalLength) || path.getTotalLength();
+    const clamped = Math.max(0, Math.min(1, ratio));
+    path.style.strokeDashoffset = "0";
+    if (clamped <= 0) {
+      path.style.opacity = "0";
+      path.style.strokeDasharray = `0 ${total + 1}`;
+    } else if (clamped >= .999) {
+      path.style.opacity = "1";
+      path.style.strokeDasharray = "none";
+    } else {
+      path.style.opacity = "1";
+      path.style.strokeDasharray = `${Math.max(.01, total * clamped)} ${total + 1}`;
+    }
   }
 
   function updateStrokeVisuals() {
@@ -235,7 +253,7 @@
     if (best.len > progressLength) progressLength = best.len;
     const snapped = path.getPointAtLength(progressLength);
     setCompanion(snapped.x, snapped.y);
-    path.style.strokeDashoffset = `${Math.max(0, total - progressLength)}`;
+    setPathProgress(path, progressLength / total);
     if (progressLength / total >= .975) completeStroke();
   }
 
@@ -257,7 +275,7 @@
     const stroke = item.strokes[strokeIndex];
     const path = progressPaths[strokeIndex];
     if (stroke.type === "tap") path.setAttribute("opacity", "1");
-    else path.style.strokeDashoffset = "0";
+    else setPathProgress(path, 1);
     setCompanion(stroke.end[0], stroke.end[1]);
     sparkleTone();
     strokeIndex++;
@@ -292,7 +310,7 @@
     strokeIndex = 0;
     progressPaths.forEach(path => {
       if (path.tagName === "circle") path.setAttribute("opacity", "0");
-      else path.style.strokeDashoffset = `${path.getTotalLength()}`;
+      else setPathProgress(path, 0);
     });
     updateStrokeVisuals();
     speak(item.narration);
@@ -311,7 +329,7 @@
         const ratio = Math.min(1, elapsed / Math.max(900, total * 15));
         const eased = ratio * ratio * (3 - 2 * ratio);
         const p = path.getPointAtLength(total * eased);
-        path.style.strokeDashoffset = `${total * (1 - eased)}`;
+        setPathProgress(path, eased);
         setCompanion(p.x, p.y);
       }
       const duration = stroke.type === "tap" ? 850 : Math.max(900, progressPaths[active].getTotalLength() * 15);
@@ -321,7 +339,7 @@
           demoFrame = 0;
           setTimeout(() => {
             strokeIndex = 0;
-            progressPaths.forEach(path => path.tagName === "circle" ? path.setAttribute("opacity", "0") : path.style.strokeDashoffset = `${path.getTotalLength()}`);
+            progressPaths.forEach(path => path.tagName === "circle" ? path.setAttribute("opacity", "0") : setPathProgress(path, 0));
             updateStrokeVisuals();
             els.instruction.textContent = firstTime ? `Now it’s your turn—drag the ${item.companion.name} from number 1.` : `Your turn! Start at number 1.`;
             speak(firstTime ? `Now it's your turn. Drag the ${item.companion.name} from number one.` : "Your turn.");
@@ -474,7 +492,7 @@
     else if (!els.celebration.classList.contains("hidden")) returnToPicker();
     else if (item) returnToPicker();
   });
-  window.addEventListener("resize", () => { if (item && dragging) { dragging = false; progressLength = 0; const path = progressPaths[strokeIndex]; if (path && path.tagName !== "circle") path.style.strokeDashoffset = `${path.getTotalLength()}`; updateStrokeVisuals(); } });
+  window.addEventListener("resize", () => { if (item && dragging) { dragging = false; progressLength = 0; const path = progressPaths[strokeIndex]; if (path && path.tagName !== "circle") setPathProgress(path, 0); updateStrokeVisuals(); } });
 
   els.narrationToggle.checked = saved.narration;
   els.effectsToggle.checked = saved.effects;
