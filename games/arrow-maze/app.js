@@ -28,7 +28,7 @@
   const elLevel = $('level');
   const elArrows = $('arrows-left');
   const elHearts = $('hearts');
-  const btnMute = $('btn-mute');
+  const soundToggle = $('sound-toggle');
   const btnReset = $('btn-reset-view');
   const btnNew = $('btn-new');
   const backdrop = $('modal-backdrop');
@@ -39,6 +39,9 @@
   const btnLevel = $('btn-level');
   const levelBackdrop = $('level-backdrop');
   const lvlInput = $('lvl-input');
+  const settingsBtn = $('settings-btn');
+  const settingsBackdrop = $('settings-backdrop');
+  const settingsClose = $('settings-close');
 
   // offscreen static layer (all alive, non-animating arrows)
   const stat = document.createElement('canvas');
@@ -546,8 +549,13 @@
       modalActions.appendChild(b);
     }
     backdrop.classList.remove('hidden');
+    backdrop.setAttribute('aria-hidden', 'false');
+    setTimeout(() => modalActions.querySelector('button')?.focus(), 30);
   }
-  function hideModal() { backdrop.classList.add('hidden'); }
+  function hideModal() {
+    backdrop.classList.add('hidden');
+    backdrop.setAttribute('aria-hidden', 'true');
+  }
 
   // ---- audio (Web Audio synth) --------------------------------------------
   const Sound = (() => {
@@ -694,10 +702,8 @@
     clearTimeout(hintTimer);
     hintTimer = setTimeout(() => zoomHint.classList.remove('show'), 1400);
   }
-  btnMute.addEventListener('click', () => {
-    S.mute = !S.mute;
-    btnMute.textContent = S.mute ? '🔇' : '🔊';
-    btnMute.classList.toggle('off', S.mute);
+  soundToggle.addEventListener('change', () => {
+    S.mute = !soundToggle.checked;
     persist();
   });
   btnReset.addEventListener('click', () => { resize(true); });
@@ -712,9 +718,14 @@
     hideModal();
     lvlInput.value = S.level;
     levelBackdrop.classList.remove('hidden');
+    levelBackdrop.setAttribute('aria-hidden', 'false');
     setTimeout(() => { lvlInput.focus(); lvlInput.select(); }, 30);
   }
-  function closeLevelPicker() { levelBackdrop.classList.add('hidden'); }
+  function closeLevelPicker() {
+    levelBackdrop.classList.add('hidden');
+    levelBackdrop.setAttribute('aria-hidden', 'true');
+    btnLevel.focus();
+  }
   function gotoLevel(n) {
     n = Math.max(1, Math.min(MAX_LEVEL, Math.round(n) || 1));
     closeLevelPicker();
@@ -741,6 +752,27 @@
     if (e.target === levelBackdrop) closeLevelPicker();
   });
 
+  function openSettings() {
+    settingsBackdrop.classList.remove('hidden');
+    settingsBackdrop.setAttribute('aria-hidden', 'false');
+    settingsClose.focus();
+  }
+  function closeSettings() {
+    settingsBackdrop.classList.add('hidden');
+    settingsBackdrop.setAttribute('aria-hidden', 'true');
+    settingsBtn.focus();
+  }
+  settingsBtn.addEventListener('click', openSettings);
+  settingsClose.addEventListener('click', closeSettings);
+  settingsBackdrop.addEventListener('click', (e) => {
+    if (e.target === settingsBackdrop) closeSettings();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    if (!settingsBackdrop.classList.contains('hidden')) closeSettings();
+    else if (!levelBackdrop.classList.contains('hidden')) closeLevelPicker();
+  });
+
   let resizeT = 0;
   window.addEventListener('resize', () => {
     clearTimeout(resizeT);
@@ -756,8 +788,7 @@
     const sv = loadSave();
     S.mute = !!sv.mute;
     S.perfect = sv.perfect || {};
-    btnMute.textContent = S.mute ? '🔇' : '🔊';
-    btnMute.classList.toggle('off', S.mute);
+    soundToggle.checked = !S.mute;
     let level = Math.max(1, sv.level || 1);
     let seed = sv.seed || ('L' + level + '-' + rndSeed());
     const m = /level=(\d+)/.exec(location.hash);   // testing override
