@@ -240,6 +240,21 @@ test("uses a glow filter that supports zero-width vertical paths", () => {
     "soft-glow must use user-space coordinates so vertical paths have a valid filter region");
 });
 
+test("defaults narration off and auto-demonstrates only the first opened character", () => {
+  const html = fs.readFileSync(path.join(repoRoot, "games/letter-trails/index.html"), "utf8");
+  const appSource = fs.readFileSync(path.join(repoRoot, "games/letter-trails/app.js"), "utf8");
+  assert.doesNotMatch(html, /id=["']narration-toggle["'][^>]*\bchecked\b/,
+    "the narration setting must render unchecked by default");
+  assert.match(appSource, /introDemoSeen:\s*false,\s*narration:\s*false/,
+    "fresh players must start with narration off and one introductory demo pending");
+  assert.match(appSource, /const showIntroDemo = !saved\.introDemoSeen/,
+    "automatic help must be controlled by one device-wide introductory-demo flag");
+  assert.match(appSource, /saved\.introDemoSeen = true; persist\(\)/,
+    "opening the first character must persist that its automatic demo was shown");
+  assert.doesNotMatch(appSource, /saved\.demos\.includes/,
+    "automatic demos must not repeat once per character");
+});
+
 let failures = 0;
 for (const { name, fn } of tests) {
   try {

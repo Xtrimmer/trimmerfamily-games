@@ -38,7 +38,7 @@
   let audioContext = null;
 
   function defaultState() {
-    return { version: 1, mode: "capital", completed: [], demos: [], narration: true, effects: true };
+    return { version: 2, mode: "capital", completed: [], introDemoSeen: false, narration: false, effects: true };
   }
 
   function loadState() {
@@ -50,9 +50,12 @@
       if (!raw) return fallback;
       const parsed = JSON.parse(raw);
       return {
-        ...fallback, ...parsed, version: 1,
+        ...fallback, ...parsed, version: 2,
         completed: Array.isArray(parsed.completed) ? parsed.completed.filter(id => DATA.byId[id]) : [],
-        demos: Array.isArray(parsed.demos) ? parsed.demos.filter(id => DATA.byId[id]) : []
+        introDemoSeen: typeof parsed.introDemoSeen === "boolean"
+          ? parsed.introDemoSeen
+          : Array.isArray(parsed.demos) && parsed.demos.length > 0,
+        narration: parsed.version === 2 ? Boolean(parsed.narration) : false
       };
     } catch (_) {
       storageAvailable = false;
@@ -104,9 +107,9 @@
     departures = 0;
     setView("trace");
     renderCharacter();
-    const firstTime = !saved.demos.includes(item.id);
-    if (firstTime) {
-      saved.demos.push(item.id); persist();
+    const showIntroDemo = !saved.introDemoSeen;
+    if (showIntroDemo) {
+      saved.introDemoSeen = true; persist();
       setTimeout(() => playDemo(true), 380);
     } else {
       announceIntro();
@@ -460,7 +463,7 @@
   els.settingsModal.addEventListener("click", event => { if (event.target === els.settingsModal) els.settingsClose.click(); });
   els.narrationToggle.addEventListener("change", () => { saved.narration = els.narrationToggle.checked; persist(); if (!saved.narration) window.speechSynthesis?.cancel?.(); });
   els.effectsToggle.addEventListener("change", () => { saved.effects = els.effectsToggle.checked; persist(); });
-  els.resetDemos.addEventListener("click", () => { saved.demos = []; persist(); els.resetDemos.textContent = "First-time demos reset ✓"; setTimeout(() => els.resetDemos.textContent = "Replay first-time demos", 1500); });
+  els.resetDemos.addEventListener("click", () => { saved.introDemoSeen = false; persist(); els.resetDemos.textContent = "Intro demo reset ✓"; setTimeout(() => els.resetDemos.textContent = "Replay introductory demo", 1500); });
 
   function beginResetHold(event) {
     event.preventDefault();
