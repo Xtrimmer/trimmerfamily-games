@@ -234,6 +234,12 @@ test("reveals straight strokes without dash-offset rendering artifacts", () => {
     "pointer tracing must use the stable progress renderer");
 });
 
+test("uses a glow filter that supports zero-width vertical paths", () => {
+  const html = fs.readFileSync(path.join(repoRoot, "games/letter-trails/index.html"), "utf8");
+  assert.match(html, /<filter[^>]+id=["']soft-glow["'][^>]+filterUnits=["']userSpaceOnUse["']/,
+    "soft-glow must use user-space coordinates so vertical paths have a valid filter region");
+});
+
 let failures = 0;
 for (const { name, fn } of tests) {
   try {
