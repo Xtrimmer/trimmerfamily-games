@@ -255,6 +255,12 @@ test("defaults narration off and auto-demonstrates only the first opened charact
     "automatic demos must not repeat once per character");
 });
 
+test("keeps the Back control compact instead of stretching across the header", () => {
+  const css = fs.readFileSync(path.join(repoRoot, "games/letter-trails/style.css"), "utf8");
+  assert.match(css, /\.back\s*\{[^}]*justify-self:\s*start/,
+    "the Back control must use the same compact grid alignment as Arrow Maze");
+});
+
 let failures = 0;
 for (const { name, fn } of tests) {
   try {

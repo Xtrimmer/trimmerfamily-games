@@ -26,6 +26,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--gold); outline-
 .top-actions { justify-self: end; display: flex; gap: 8px; }
 .control { min-height: 44px; border: 1px solid rgba(255,255,255,.13); border-radius: 14px; padding: 0 14px; background: rgba(255,255,255,.075); color: var(--ink); display: inline-flex; align-items: center; justify-content: center; gap: 7px; text-decoration: none; cursor: pointer; font-weight: 800; }
 .control:hover { background: rgba(255,255,255,.13); }
+.back { justify-self: start; }
 main { width: min(1120px, 100%); margin: 0 auto; padding: clamp(18px, 4vw, 42px); }
 .view { display: none; }
 .view.active { display: block; }
