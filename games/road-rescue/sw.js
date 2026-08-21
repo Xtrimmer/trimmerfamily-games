@@ -1,6 +1,6 @@
-const CACHE = 'road-rescue-v1';
+const CACHE = 'road-rescue-v2';
 const CORE = [
-  './', 'index.html', 'style.css?v=1', 'generator.js?v=1', 'app.js?v=1',
+  './', 'index.html', 'style.css?v=2', 'generator.js?v=1', 'app.js?v=1',
   'audio/taxi.wav', 'audio/police.wav', 'audio/fire.wav', 'audio/ambulance.wav',
 ];
 self.addEventListener('install', event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(CORE)).then(() => self.skipWaiting())));

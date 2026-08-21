@@ -37,6 +37,8 @@ assert.match(html, /id="help-btn"/, 'Help control missing');
 assert.match(html, /id="settings-btn"/, 'Settings control missing');
 assert.match(html, /id="piece-tray"/, 'piece tray missing');
 assert.match(html, /id="sound-toggle"/, 'sound preference missing');
+assert.match(html, /<filter[^>]+id="road-glow"[^>]+filterUnits="userSpaceOnUse"/,
+  'road glow must use user-space bounds so straight and curved placed pieces render at full size');
 assert.match(css, /grid-template-columns:minmax\(320px,1fr\).*minmax\(150px,190px\)/, 'landscape board/tray layout missing');
 assert.match(css, /@media \(max-width:700px\)/, 'portrait layout missing');
 assert.match(app, /localStorage\.setItem\(SAVE_KEY/, 'local progress persistence missing');

@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#0b0b0f" />
   <meta name="description" content="Fix the road, then help a colorful vehicle reach its destination." />
   <title>Road Rescue</title>
-  <link rel="stylesheet" href="style.css?v=1" />
+  <link rel="stylesheet" href="style.css?v=2" />
 </head>
 <body>
   <div id="app">
@@ -32,7 +32,7 @@
           <title id="board-title">Road repair puzzle</title>
           <desc id="board-desc">Place the road pieces into the matching construction openings.</desc>
           <defs>
-            <filter id="road-glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            <filter id="road-glow" x="-100" y="-100" width="1000" height="1000" filterUnits="userSpaceOnUse"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
             <filter id="vehicle-glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
           </defs>
           <g id="scenery-layer"></g>
