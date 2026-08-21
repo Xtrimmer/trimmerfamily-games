@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <meta name="theme-color" content="#0b0b0f" />
+  <meta name="description" content="Fix the road, then help a colorful vehicle reach its destination." />
+  <title>Road Rescue</title>
+  <link rel="stylesheet" href="style.css?v=1" />
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <a class="control back" href="../../" aria-label="Back"><span aria-hidden="true">←</span><span>Back</span></a>
+      <div class="brand"><span class="brand-mark" aria-hidden="true">✦</span><span>Road Rescue</span></div>
+      <div class="top-actions">
+        <button id="help-btn" class="control" type="button"><span aria-hidden="true">▶</span><span class="wide-label">Help</span></button>
+        <button id="settings-btn" class="control" type="button" aria-haspopup="dialog"><span aria-hidden="true">⚙</span><span class="wide-label">Settings</span></button>
+      </div>
+    </header>
+
+    <section class="statusbar" aria-label="Road status">
+      <button id="level-btn" class="status-button" type="button" aria-haspopup="dialog">Level <strong id="level-number">1</strong><span aria-hidden="true">⌄</span></button>
+      <div class="status-stat"><span aria-hidden="true">★</span><strong id="star-count">0</strong><small>Stars</small></div>
+      <div class="status-stat"><strong id="pieces-left">1</strong><small>Pieces left</small></div>
+    </section>
+
+    <main id="game" class="theme-downtown">
+      <section id="board-wrap" class="board-wrap" aria-label="Road repair board">
+        <div class="scene-glow" aria-hidden="true"></div>
+        <svg id="board" viewBox="0 0 400 400" role="img" aria-labelledby="board-title board-desc">
+          <title id="board-title">Road repair puzzle</title>
+          <desc id="board-desc">Place the road pieces into the matching construction openings.</desc>
+          <defs>
+            <filter id="road-glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            <filter id="vehicle-glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+          <g id="scenery-layer"></g>
+          <g id="road-layer"></g>
+          <g id="hole-layer"></g>
+          <g id="route-layer"></g>
+          <g id="destination-layer"></g>
+          <g id="vehicle-layer"></g>
+        </svg>
+        <div id="board-message" class="board-message" aria-live="polite">Fix the road!</div>
+      </section>
+
+      <aside id="tray-panel" class="tray-panel" aria-label="Road pieces">
+        <div class="tray-heading"><span>Road pieces</span><small id="tray-tip">Drag or tap</small></div>
+        <div id="piece-tray" class="piece-tray" role="list"></div>
+        <button id="show-me-btn" class="show-me hidden" type="button">Show me</button>
+      </aside>
+    </main>
+
+    <div id="celebration" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="celebration-title">
+      <div id="confetti" class="confetti" aria-hidden="true"></div>
+      <div class="modal-card celebration-card">
+        <div id="celebration-icon" class="celebration-icon">🚕</div>
+        <p class="eyebrow">Road rescued</p>
+        <h2 id="celebration-title">You fixed it!</h2>
+        <p id="celebration-copy">The taxi reached its passenger.</p>
+        <div class="celebration-actions">
+          <button id="next-btn" class="primary" type="button">Next Road</button>
+          <button id="replay-btn" type="button">Play Again</button>
+          <button id="levels-from-win" type="button">Levels</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="levels-modal" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="levels-title">
+      <div class="modal-card levels-card">
+        <div class="modal-head"><div><p class="eyebrow">Choose a road</p><h2 id="levels-title">Levels</h2></div><button class="close" id="levels-close" aria-label="Close levels">×</button></div>
+        <button id="continue-btn" class="primary continue-btn" type="button">Continue Level 1</button>
+        <div id="level-grid" class="level-grid"></div>
+        <div class="page-controls"><button id="page-prev" type="button" aria-label="Previous levels">←</button><span id="page-label">1–20</span><button id="page-next" type="button" aria-label="Next levels">→</button></div>
+      </div>
+    </div>
+
+    <div id="settings-modal" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <div class="modal-card settings-card">
+        <div class="modal-head"><h2 id="settings-title">Settings</h2><button class="close" id="settings-close" aria-label="Close settings">×</button></div>
+        <label class="setting-row"><span><strong>Sound effects</strong><small>Vehicles, pieces, and celebrations</small></span><input id="sound-toggle" type="checkbox" checked /></label>
+        <button id="unlock-btn" class="hold-action" type="button">Hold to unlock all levels</button>
+        <button id="reset-level-btn" class="hold-action" type="button">Hold to reset this level</button>
+        <button id="reset-progress-btn" class="hold-action danger" type="button">Hold to reset progress</button>
+        <p id="storage-note" class="storage-note hidden">Progress cannot be saved in this browser, but you can still play.</p>
+      </div>
+    </div>
+  </div>
+  <div id="drag-ghost" class="drag-ghost hidden" aria-hidden="true"></div>
+  <script src="generator.js?v=1"></script>
+  <script src="app.js?v=1"></script>
+</body>
+</html>

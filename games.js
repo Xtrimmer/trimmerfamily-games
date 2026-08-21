@@ -16,4 +16,10 @@ window.GAMES = [
     blurb: 'Trace letters and numbers with colorful friends.',
     thumb: 'assets/thumbs/letter-trails.png',
   },
+  {
+    slug: 'road-rescue',
+    name: 'Road Rescue',
+    blurb: 'Drag the missing pieces into place, fix the road, and send the rescue vehicle on its way.',
+    thumb: 'assets/thumbs/road-rescue.svg',
+  },
 ];
